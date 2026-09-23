@@ -32,6 +32,8 @@ CONFIG_CMD_REGULATOR=y
 # CONFIG_SPL_DOS_PARTITION is not set
 # CONFIG_OF_UPSTREAM is not set
 CONFIG_OF_SPL_REMOVE_PROPS="clock-names interrupt-parent assigned-clocks assigned-clock-rates assigned-clock-parents"
+CONFIG_ADC=y
+CONFIG_SARADC_ROCKCHIP=y
 CONFIG_BUTTON=y
 CONFIG_BUTTON_ADC=y
 # CONFIG_USB_FUNCTION_FASTBOOT is not set

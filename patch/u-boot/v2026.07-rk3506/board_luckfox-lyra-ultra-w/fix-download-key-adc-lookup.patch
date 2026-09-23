@@ -1,0 +1,24 @@
+rockchip: recognize the RK3506 SARADC when checking the download key
+
+The Lyra Ultra device tree names its SARADC node adc@ff4e8000. The
+generic download-key check only looks for devices named saradc*, so it
+never samples the key on ADC channel 1. Accept the RK3506 compatible
+string as well, retaining the existing lookup for older device trees.
+
+Keep this patch in the Lyra Ultra board directory. The existing download
+path sets BOOT_BROM_DOWNLOAD and resets into BootROM download mode; it
+does not start the vendor U-Boot's Loader-mode gadget.
+
+diff --git a/arch/arm/mach-rockchip/boot_mode.c b/arch/arm/mach-rockchip/boot_mode.c
+--- a/arch/arm/mach-rockchip/boot_mode.c
++++ b/arch/arm/mach-rockchip/boot_mode.c
+@@ -51,7 +51,8 @@ __weak int rockchip_dnl_key_pressed(void)
+ 
+ 	ret = -ENODEV;
+ 	uclass_foreach_dev(dev, uc) {
+-		if (!strncmp(dev->name, "saradc", 6)) {
++		if (!strncmp(dev->name, "saradc", 6) ||
++		    device_is_compatible(dev, "rockchip,rk3506-saradc")) {
+ 			ret = adc_channel_single_shot(dev->name, 1, &val);
+ 			break;
+ 		}
